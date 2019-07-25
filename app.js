@@ -23,7 +23,7 @@ app.get('/',(req,res)=>{
 
 app.post('/',(req,res)=>{
     //Setu the api key to laod data
-let apiKey = '268781312897442505ba1ea738924c77';
+let apiKey = '********************************';
 let city = req.body.form;
 let url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`;
 
