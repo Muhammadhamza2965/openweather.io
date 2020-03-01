@@ -1,32 +1,41 @@
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
 <style type="text/css">
 	body{
 		background-color:#004156; 
 	}
+	.img{
+		margin-top: -100px;
+		margin-right: -400px;
+	}
 </style>
 
 <div class="container">
-	<div class="jumbotron" style="margin-top: 50px;">
+	<div class="jumbotron" style="margin-top: 20px; background-color: #f8f9fa">
+		
 	<form method="post" action="/">
   <div class="row">
     <div class="col">
       <input type="text" name="city" class="form-control" placeholder="Enter City Name" style="width: 100%">
       </div>
-<button class="btn btn-primary" type="submit">Get Weather</button>
+
+<button class="btn btn-primary" type="submit"> Get Weather</button>
 </div>
  </form>
 </div>
 
 
+
 {{#if dat}}
 <div  id='card' class="card text-center text-white bg-dark mb-3">
   <div class="card-header">
-   Current Weather
+   Current Weather 
   </div>
   <div class="card-body">
-    <p class="card-text">The Current temperature is {{dat.full_data.main.temp}} Degree </p>
-      <p class="card-text"> The Current Condition is {{dat.current_desc}} </p>
-        <p class="card-text">Region {{dat.full_data.sys.country}} </p>
+    <p class="card-text">Current temperature is {{dat.full_data.main.temp}} Degree </p>
+      <p class="card-text">Current Condition is {{dat.current_desc}} </p>
           <p class="card-text"> Wind Speed {{dat.full_data.wind.speed}} </p>
+        <p class="card-text">Region {{dat.full_data.sys.country}} </p>
+       
     
     
     <button class="btn btn-lg bg-dark btn-primary" onclick="clearval()">Clear</button>
@@ -34,7 +43,15 @@
 </div>
 {{/if}}
 
+<canvas id="myChart" width="400" height="400"></canvas>
 <script type="text/javascript">
+
+	// For a pie chart
+var myPieChart = new Chart(ctx, {
+    type: 'pie',
+    data: data,
+    options: options
+});
 	function clearval(){
   $("#card").hide();
 	}
