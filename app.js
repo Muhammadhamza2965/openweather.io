@@ -4,11 +4,10 @@ var app = express();
 const exphbs = require('express-handlebars');
 const request = require('request');
 var bodyParser = require('body-Parser');
-app.enable('view cache');
-
 // Register Handlebars view engine
 app.set('views',path.join(__dirname,"views"));
 app.set("view engine","hbs");
+app.enable('view cache');
 
 
 //setting the bodyParser
@@ -22,34 +21,56 @@ app.get('/',(req,res)=>{
 
 
 app.post('/',(req,res)=>{
-    //Setu the api key to laod data
-let apiKey = '********************************';
-let city = req.body.form;
-let url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`;
+var weather = require('openweather-apis');
 
-    request(url, function (err, response, body) {
-        if(err){
-          res.redirect('index');
-        }
-         else {
-          
-          let weather = JSON.parse(body);
-          let message = `It's ${weather.main.temp} degrees in
-          ${weather.name} Region ${weather.sys.country}
-          Humidity ${weather.main.humidity}
-          ` ;
+//set the weather api lang to the english
+weather.setLang('en');
+//Setu the api key to laod data
+var ownKey = "e7e8f6d4af62f966dd497dc7538614f9";
+weather.setAPPID(ownKey);
+//require the city from the form
+var city = req.body.city;
+
+//set the city for search
+  weather.setCity(city);
+
+
+//variables to hold weather valures
+  var current_temp,current_desc;
+  //method to get curret temperature
+  weather.getTemperature(function(err, temp){
+    current_temp = temp;
+        console.log(temp);
+    });
+  //method to get curret city description
+weather.getDescription(function(err, desc){
+        current_desc = desc
+        console.log(desc);
+    });
+
+
+// get all the JSON file returned from server (rich of info)
+    weather.getAllWeather(function(err, JSONObj){
+        console.log(JSONObj);
+    });
+
+
+//object to hold all the data and then push it to the hbs
+
+          var weather = {
+            'current_temp':current_temp
+          }
+          //render the data to the index
           res.render('index',{
               weather:weather
           });
-        }
-      });
-  })
+        });
 
    
 
 
 
-
-app.listen(3000,()=>{
-    console.log('Server is running...');
+var port = 3000;
+app.listen(port,()=>{
+    console.log(`Server is running...${port}`);
 });
