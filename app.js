@@ -5,11 +5,12 @@ const exphbs = require('express-handlebars');
 const request = require('request');
 var bodyParser = require('body-Parser');
 // Register Handlebars view engine
-app.set('views',path.join(__dirname,"views"));
-app.set("view engine","hbs");
+app.engine('.hbs', exphbs({extname: '.hbs',defaultLayout:'main',layoutDir:'./views/layouts'}));
+app.set('view engine', '.hbs');
 app.enable('view cache');
 
-
+//public path to read public files
+app.use(express.static('public'));
 //setting the bodyParser
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -19,7 +20,11 @@ app.get('/',(req,res)=>{
 });
 
 
-
+//vars to hold values
+var current_temp;
+var current_desc;
+var data;
+var full_data;
 app.post('/',(req,res)=>{
 var weather = require('openweather-apis');
 
@@ -35,35 +40,31 @@ var city = req.body.city;
   weather.setCity(city);
 
 
-//variables to hold weather valures
-  var current_temp,current_desc;
+
   //method to get curret temperature
   weather.getTemperature(function(err, temp){
     current_temp = temp;
-        console.log(temp);
     });
   //method to get curret city description
 weather.getDescription(function(err, desc){
-        current_desc = desc
-        console.log(desc);
-    });
-
-
-// get all the JSON file returned from server (rich of info)
+       current_desc = desc;
+   });
+//get all the JSON file returned from server (rich of info)
     weather.getAllWeather(function(err, JSONObj){
-        console.log(JSONObj);
+       full_data = JSONObj;
+        
     });
+data = {
+  full_data,
+  current_desc
+};
+console.log(data);
+res.render('index',{
+  dat:data
+});
 
 
-//object to hold all the data and then push it to the hbs
 
-          var weather = {
-            'current_temp':current_temp
-          }
-          //render the data to the index
-          res.render('index',{
-              weather:weather
-          });
         });
 
    

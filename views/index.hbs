@@ -1,9 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title></title>
-</head>
-<body>
+<style type="text/css">
+	body{
+		background-color:#004156; 
+	}
+</style>
 
 <div class="container">
 	<div class="jumbotron" style="margin-top: 50px;">
@@ -14,18 +13,29 @@
       </div>
 <button class="btn btn-primary" type="submit">Get Weather</button>
 </div>
-
  </form>
-
-
-{{#each weather}}
-
-
-
-{{/each}}
-	
-	</div>
 </div>
-</body>
-</html>
 
+
+{{#if dat}}
+<div  id='card' class="card text-center text-white bg-dark mb-3">
+  <div class="card-header">
+   Current Weather
+  </div>
+  <div class="card-body">
+    <p class="card-text">The Current temperature is {{dat.full_data.main.temp}} Degree </p>
+      <p class="card-text"> The Current Condition is {{dat.current_desc}} </p>
+        <p class="card-text">Region {{dat.full_data.sys.country}} </p>
+          <p class="card-text"> Wind Speed {{dat.full_data.wind.speed}} </p>
+    
+    
+    <button class="btn btn-lg bg-dark btn-primary" onclick="clearval()">Clear</button>
+  </div>
+</div>
+{{/if}}
+
+<script type="text/javascript">
+	function clearval(){
+  $("#card").hide();
+	}
+</script>
