@@ -71,7 +71,4 @@ res.render('index',{
 
 
 
-var port = 3000;
-app.listen(port,()=>{
-    console.log(`Server is running...${port}`);
-});
+app.listen(process.env.PORT || 3000);
